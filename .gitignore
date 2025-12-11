@@ -136,3 +136,9 @@ cython_debug/
 
 # temp dirs
 tmp/
+
+module/.terraform/
+module/backend.tf
+module/terraform.tfvars.json
+module/plan
+module/plan.json

@@ -49,3 +49,10 @@ dmypy.json
 spike.py
 **/.DS_Store
 tmp/
+
+module/.terraform/
+module/*.tftest.hcl
+module/backend.tf
+module/terraform.tfvars.json
+module/plan
+module/plan.json

@@ -1,26 +1,9 @@
-# er-cloudflare-zone
+# External Resources Cloudflare Zone Module
 
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 
-Welcome to er-cloudflare-zone! :rocket:
-
-## Features
-
-- :swimmer:
-- :bike:
-- :runner:
-
-## Deployment
-
-See `openshift` templates.
-
-## Usage
-
-```bash
-$ er-cloudflare-zone
-3.8km 🏊, 180km 🚲, 42.2km 🏃
-```
+External Resources module to provision and manage Cloudflare zone.
 
 ## Development
 
@@ -45,6 +28,3 @@ make tests
 ## License
 
 This project is licensed under the terms of the [Apache 2.0 license](/LICENSE).
-
-[pypi-link]:      <https://pypi.org/project/er-cloudflare-zone/>
-[pypi-platforms]: <https://img.shields.io/pypi/pyversions/er-cloudflare-zone>
