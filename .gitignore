@@ -136,6 +136,8 @@ cython_debug/
 
 # temp dirs
 tmp/
+input.json
+credentials
 
 module/.terraform/
 module/backend.tf

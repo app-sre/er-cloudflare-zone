@@ -49,6 +49,8 @@ dmypy.json
 spike.py
 **/.DS_Store
 tmp/
+input.json
+credentials
 
 module/.terraform/
 module/*.tftest.hcl
