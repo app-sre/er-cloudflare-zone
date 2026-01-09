@@ -61,7 +61,7 @@ class CloudflareZone(BaseModel):
     zone: str
     type: str | None = None
     plan: str | None = None
-    records: list[CloudflareDNSRecord] = []
+    dns_records: list[CloudflareDNSRecord] = []
     rulesets: list[CloudflareRuleset] = []
 
 

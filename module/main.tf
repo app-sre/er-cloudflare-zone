@@ -20,7 +20,7 @@ resource "cloudflare_zone_subscription" "this" {
 
 resource "cloudflare_dns_record" "this" {
   for_each = {
-    for record in var.records : record.identifier => record
+    for record in var.dns_records : record.identifier => record
   }
 
   zone_id  = cloudflare_zone.this.id

@@ -2,14 +2,14 @@ variable "account_id" {
   type = string
 }
 
+variable "dns_records" {
+  type    = list(object({ identifier = string, name = string, type = string, ttl = number, value = string, proxied = bool, priority = number }))
+  default = []
+}
+
 variable "plan" {
   type    = string
   default = null
-}
-
-variable "records" {
-  type    = list(object({ identifier = string, name = string, type = string, ttl = number, value = string, proxied = bool, priority = number }))
-  default = []
 }
 
 variable "rulesets" {
