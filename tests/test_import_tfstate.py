@@ -173,7 +173,12 @@ def test_import_zone_with_dns_records(
     )
 
     mock_record = create_autospec(ARecord, instance=True)
-    mock_record.configure_mock(id="record-456", name="www.example.com", type="A", content="192.0.2.1")
+    mock_record.configure_mock(
+        id="record-456",
+        name="www.example.com",
+        type="A",
+        content="192.0.2.1",
+    )
     setup_cloudflare_client(mock_cloudflare, mock_zone, dns_records=[mock_record])
 
     main()
@@ -260,7 +265,7 @@ def test_dns_record_not_found_skipped(
                 "name": "missing.example.com",
                 "type": "A",
                 "ttl": 300,
-                "value": "192.0.2.1",
+                "content": "192.0.2.1",
             }
         ]
     )
