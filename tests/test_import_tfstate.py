@@ -89,6 +89,13 @@ def mock_terraform_run() -> Iterator[MagicMock]:
         yield mock
 
 
+@pytest.fixture(autouse=True)
+def mock_logger() -> Iterator[MagicMock]:
+    """Mock logger to suppress log output in tests."""
+    with patch("er_cloudflare_zone.import_tfstate.logger") as mock:
+        yield mock
+
+
 @pytest.fixture
 def cli_args() -> Iterator[None]:
     """Mock sys.argv for normal (non-dry-run) execution."""
@@ -166,7 +173,7 @@ def test_import_zone_with_dns_records(
     )
 
     mock_record = create_autospec(ARecord, instance=True)
-    mock_record.configure_mock(id="record-456", name="www.example.com", type="A")
+    mock_record.configure_mock(id="record-456", name="www.example.com", type="A", content="192.0.2.1")
     setup_cloudflare_client(mock_cloudflare, mock_zone, dns_records=[mock_record])
 
     main()
@@ -217,7 +224,7 @@ def test_import_zone_with_rulesets(
             [
                 "import",
                 'cloudflare_ruleset.this["redirect-ruleset"]',
-                "zone-123/ruleset-789",
+                "zones/zone-123/ruleset-789",
             ],
             dry_run=False,
         ),

@@ -6,6 +6,7 @@ import subprocess
 
 from cloudflare import Cloudflare
 from external_resources_io.input import parse_model, read_input_from_file
+from external_resources_io.log import setup_logging
 from external_resources_io.terraform import terraform_run
 from pydantic import BaseModel
 
@@ -110,12 +111,12 @@ def import_dns_records(
 ) -> list[ImportResult]:
     """Import DNS records."""
     dns_record_by_key = {
-        (record.name, record.type): record.id
+        (record.name, record.type, record.content): record.id
         for record in client.dns.records.list(zone_id=zone_id)
     }
     results: list[ImportResult] = []
     for record in records:
-        record_id = dns_record_by_key.get((record.name, record.type))
+        record_id = dns_record_by_key.get((record.name, record.type, record.value))
         if record_id is None:
             logger.warning(
                 "DNS record '%s' (%s) not found, skipping",
@@ -158,7 +159,7 @@ def import_rulesets(
         results.append(
             import_resource(
                 f'cloudflare_ruleset.this["{ruleset.identifier}"]',
-                f"{zone_id}/{ruleset_id}",
+                f"zones/{zone_id}/{ruleset_id}",
                 dry_run=dry_run,
             )
         )
@@ -205,6 +206,7 @@ def import_state(
 
 def main() -> None:
     """Main entry point for import-tfstate CLI."""
+    setup_logging()
     parser = argparse.ArgumentParser(
         description="Import Cloudflare resources into Terraform state"
     )
