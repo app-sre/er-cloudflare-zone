@@ -3,8 +3,12 @@ variable "account_id" {
 }
 
 variable "dns_records" {
-  type    = list(object({ identifier = string, name = string, type = string, ttl = number, value = string, proxied = bool, priority = number }))
+  type    = list(object({ identifier = string, name = string, ttl = number, type = string, content = string, data = map(any), priority = number, proxied = bool }))
   default = []
+}
+
+variable "name" {
+  type = string
 }
 
 variable "plan" {
@@ -13,15 +17,11 @@ variable "plan" {
 }
 
 variable "rulesets" {
-  type    = list(object({ identifier = string, name = string, kind = string, phase = string, description = string, rules = list(object({ action = string, expression = string, description = string, enabled = bool, ref = string, action_parameters = map(any) })) }))
+  type    = list(object({ identifier = string, kind = string, name = string, phase = string, description = string, rules = list(object({ action = string, expression = string, action_parameters = map(any), description = string, enabled = bool, ref = string })) }))
   default = []
 }
 
 variable "type" {
   type    = string
   default = null
-}
-
-variable "zone" {
-  type = string
 }

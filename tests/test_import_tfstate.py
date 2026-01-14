@@ -36,7 +36,7 @@ def build_input_data(
     """Build input data with optional overrides."""
     return {
         "data": {
-            "zone": "example.com",
+            "name": "example.com",
             "account_id": "acct-123",
             "plan": plan,
             "dns_records": dns_records or [],
@@ -167,7 +167,7 @@ def test_import_zone_with_dns_records(
                 "name": "www.example.com",
                 "type": "A",
                 "ttl": 300,
-                "value": "192.0.2.1",
+                "content": "192.0.2.1",
             }
         ]
     )

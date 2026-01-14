@@ -13,11 +13,12 @@ class CloudflareDNSRecord(BaseModel):
 
     identifier: str
     name: str
-    type: str
     ttl: int
-    value: str | None = None
-    proxied: bool | None = None
+    type: str
+    content: str | None = None
+    data: dict[str, Any] | None = None
     priority: int | None = None
+    proxied: bool | None = None
 
 
 class CloudflareRule(BaseModel):
@@ -29,10 +30,10 @@ class CloudflareRule(BaseModel):
 
     action: str
     expression: str
+    action_parameters: dict[str, Any] | None = None
     description: str | None = None
     enabled: bool | None = None
     ref: str | None = None
-    action_parameters: dict[str, Any] | None = None
 
 
 class CloudflareRuleset(BaseModel):
@@ -43,8 +44,8 @@ class CloudflareRuleset(BaseModel):
     """
 
     identifier: str
-    name: str
     kind: str
+    name: str
     phase: str
     description: str | None = None
     rules: list[CloudflareRule] = []
@@ -58,9 +59,9 @@ class CloudflareZone(BaseModel):
     """
 
     account_id: str
-    zone: str
-    type: str | None = None
+    name: str
     plan: str | None = None
+    type: str | None = None
     dns_records: list[CloudflareDNSRecord] = []
     rulesets: list[CloudflareRuleset] = []
 

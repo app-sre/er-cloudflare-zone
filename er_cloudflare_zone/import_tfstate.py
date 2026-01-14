@@ -116,7 +116,7 @@ def import_dns_records(
     }
     results: list[ImportResult] = []
     for record in records:
-        record_id = dns_record_by_key.get((record.name, record.type, record.value))
+        record_id = dns_record_by_key.get((record.name, record.type, record.content))
         if record_id is None:
             logger.warning(
                 "DNS record '%s' (%s) not found, skipping",
@@ -182,11 +182,11 @@ def import_state(
     Returns:
         List of ImportResult for each import operation.
     """
-    logger.info("Looking up zone ID for '%s'", zone.zone)
-    zone_id = lookup_zone_id(client, zone.zone)
+    logger.info("Looking up zone ID for '%s'", zone.name)
+    zone_id = lookup_zone_id(client, zone.name)
 
     if zone_id is None:
-        msg = f"Zone '{zone.zone}' not found in Cloudflare"
+        msg = f"Zone '{zone.name}' not found in Cloudflare"
         logger.error(msg)
         raise ZoneNotFoundError(msg)
 

@@ -9,7 +9,7 @@ def raw_input_data() -> dict:
     """Fixture to provide test data for the AppInterfaceInput."""
     return {
         "data": {
-            "zone": "example.com",
+            "name": "example.com",
             "type": "full",
             "plan": "enterprise",
             "account_id": "some-id",
@@ -19,7 +19,7 @@ def raw_input_data() -> dict:
                     "name": "example.com",
                     "type": "A",
                     "ttl": 86400,
-                    "value": "192.0.2.0",
+                    "content": "192.0.2.0",
                     "proxied": False,
                 },
                 {

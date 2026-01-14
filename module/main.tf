@@ -6,7 +6,7 @@ resource "cloudflare_zone" "this" {
   account = {
     id = var.account_id
   }
-  name = var.zone
+  name = var.name
   type = var.type
 }
 
@@ -25,11 +25,12 @@ resource "cloudflare_dns_record" "this" {
 
   zone_id  = cloudflare_zone.this.id
   name     = each.value.name
-  content  = each.value.value
+  content  = each.value.content
   type     = each.value.type
   ttl      = each.value.ttl
   proxied  = each.value.proxied
   priority = each.value.priority
+  data     = each.value.data
 }
 
 resource "cloudflare_ruleset" "this" {
