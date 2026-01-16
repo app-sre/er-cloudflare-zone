@@ -16,7 +16,8 @@ ENV \
     # compile bytecode for faster startup
     UV_COMPILE_BYTECODE="true" \
     # disable uv cache. it doesn't make sense in a container
-    UV_NO_CACHE=true
+    UV_NO_CACHE=true \
+    TERRAFORM_MODULE_SRC_DIR="./module"
 
 # Terraform code
 COPY ${TERRAFORM_MODULE_SRC_DIR} ${TERRAFORM_MODULE_SRC_DIR}

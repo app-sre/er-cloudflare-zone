@@ -111,7 +111,7 @@ def import_dns_records(
 ) -> list[ImportResult]:
     """Import DNS records."""
     dns_record_by_key = {
-        (record.name, record.type, record.content): record.id
+        (record.name, str(record.type), record.content): record.id
         for record in client.dns.records.list(zone_id=zone_id)
     }
     results: list[ImportResult] = []
@@ -143,7 +143,7 @@ def import_rulesets(
 ) -> list[ImportResult]:
     """Import rulesets."""
     ruleset_by_key = {
-        (ruleset.name, ruleset.phase): ruleset.id
+        (ruleset.name, str(ruleset.phase)): ruleset.id
         for ruleset in client.rulesets.list(zone_id=zone_id)
     }
     results: list[ImportResult] = []
