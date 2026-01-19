@@ -1,6 +1,6 @@
 [project]
 name = "er-cloudflare-zone"
-version = "0.1.0"
+version = "0.1.1"
 description = "ERv2 module for managing Cloudflare Zone"
 authors = [
     # Feel free to add or change authors
@@ -23,10 +23,10 @@ documentation = "https://github.com/app-sre/er-cloudflare-zone"
 [dependency-groups]
 dev = [
     "external-resources-io[cli]==0.6.2",
-    "mypy==1.19.0",
+    "mypy==1.19.1",
     "pytest==9.0.2",
     "pytest-cov==7.0.0",
-    "ruff==0.14.8",
+    "ruff==0.14.13",
 ]
 
 [project.scripts]

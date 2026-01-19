@@ -16,7 +16,7 @@ test:
 
 .PHONY: build
 build:
-	$(CONTAINER_ENGINE) build -t er-cloudflare-zone:test --target test .
+	$(CONTAINER_ENGINE) build -t er-cloudflare-zone:prod --target prod .
 
 .PHONY: dev-env
 dev-env:
