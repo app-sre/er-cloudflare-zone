@@ -1,10 +1,10 @@
 """Import existing Cloudflare resources into Terraform state."""
 
-import argparse
 import logging
 import subprocess
 
 from cloudflare import Cloudflare
+from external_resources_io.config import Config
 from external_resources_io.input import parse_model, read_input_from_file
 from external_resources_io.log import setup_logging
 from external_resources_io.terraform import terraform_run
@@ -110,27 +110,37 @@ def import_dns_records(
     dry_run: bool = False,
 ) -> list[ImportResult]:
     """Import DNS records."""
-    dns_record_by_key = {
-        (record.name, str(record.type), record.content): record.id
-        for record in client.dns.records.list(zone_id=zone_id)
-    }
+    try:
+        dns_record_by_key = {
+            (record.name, str(record.type), record.content): record.id
+            for record in client.dns.records.list(zone_id=zone_id)
+        }
+    except Exception:
+        logger.exception("Failed to list DNS records for zone ID %s", zone_id)
+        return []
     results: list[ImportResult] = []
     for record in records:
         record_id = dns_record_by_key.get((record.name, record.type, record.content))
+        resource_address = f'cloudflare_dns_record.this["{record.identifier}"]'
         if record_id is None:
-            logger.warning(
-                "DNS record '%s' (%s) not found, skipping",
-                record.name,
-                record.type,
+            error_msg = f"DNS record '{record.name}' ({record.type}) not found"
+            logger.error(error_msg)
+            results.append(
+                ImportResult(
+                    resource_address=resource_address,
+                    import_id="",
+                    success=False,
+                    error_message=error_msg,
+                )
             )
-            continue
-        results.append(
-            import_resource(
-                f'cloudflare_dns_record.this["{record.identifier}"]',
-                f"{zone_id}/{record_id}",
-                dry_run=dry_run,
+        else:
+            results.append(
+                import_resource(
+                    resource_address,
+                    f"{zone_id}/{record_id}",
+                    dry_run=dry_run,
+                )
             )
-        )
     return results
 
 
@@ -142,27 +152,37 @@ def import_rulesets(
     dry_run: bool = False,
 ) -> list[ImportResult]:
     """Import rulesets."""
-    ruleset_by_key = {
-        (ruleset.name, str(ruleset.phase)): ruleset.id
-        for ruleset in client.rulesets.list(zone_id=zone_id)
-    }
+    try:
+        ruleset_by_key = {
+            (ruleset.name, str(ruleset.phase)): ruleset.id
+            for ruleset in client.rulesets.list(zone_id=zone_id)
+        }
+    except Exception:
+        logger.exception("Failed to list rulesets for zone ID %s", zone_id)
+        return []
     results: list[ImportResult] = []
     for ruleset in rulesets:
         ruleset_id = ruleset_by_key.get((ruleset.name, ruleset.phase))
+        resource_address = f'cloudflare_ruleset.this["{ruleset.identifier}"]'
         if ruleset_id is None:
-            logger.warning(
-                "Ruleset '%s' (phase: %s) not found, skipping",
-                ruleset.name,
-                ruleset.phase,
+            error_msg = f"Ruleset '{ruleset.name}' (phase: {ruleset.phase}) not found"
+            logger.error(error_msg)
+            results.append(
+                ImportResult(
+                    resource_address=resource_address,
+                    import_id="",
+                    success=False,
+                    error_message=error_msg,
+                )
             )
-            continue
-        results.append(
-            import_resource(
-                f'cloudflare_ruleset.this["{ruleset.identifier}"]',
-                f"zones/{zone_id}/{ruleset_id}",
-                dry_run=dry_run,
+        else:
+            results.append(
+                import_resource(
+                    resource_address,
+                    f"zones/{zone_id}/{ruleset_id}",
+                    dry_run=dry_run,
+                )
             )
-        )
     return results
 
 
@@ -207,20 +227,12 @@ def import_state(
 def main() -> None:
     """Main entry point for import-tfstate CLI."""
     setup_logging()
-    parser = argparse.ArgumentParser(
-        description="Import Cloudflare resources into Terraform state"
-    )
-    parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Log commands without executing",
-    )
-    args = parser.parse_args()
+    config = Config()
 
     ai_input = get_ai_input()
     client = Cloudflare()
 
-    results = import_state(client, ai_input.data, dry_run=args.dry_run)
+    results = import_state(client, ai_input.data, dry_run=config.dry_run)
 
     succeeded = sum(1 for r in results if r.success)
     failed = sum(1 for r in results if not r.success)

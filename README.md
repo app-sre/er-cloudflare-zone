@@ -32,10 +32,10 @@ ensure env vars are set and `terraform init` done, then run in terraform working
 
 ```bash
 # Preview what will be imported
-import-tfstate --dry-run
+DRY_RUN=True import-tfstate
 
 # Execute import
-import-tfstate
+DRY_RUN=False import-tfstate
 ```
 
 ## Development

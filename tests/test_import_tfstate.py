@@ -97,21 +97,17 @@ def mock_logger() -> Iterator[MagicMock]:
 
 
 @pytest.fixture
-def cli_args() -> Iterator[None]:
-    """Mock sys.argv for normal (non-dry-run) execution."""
-    with patch("sys.argv", ["import-tf-state"]):
-        yield
+def mock_dry_run(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("DRY_RUN", "True")
 
 
 @pytest.fixture
-def cli_args_dry_run() -> Iterator[None]:
-    """Mock sys.argv with --dry-run flag."""
-    with patch("sys.argv", ["import-tf-state", "--dry-run"]):
-        yield
+def mock_non_dry_run(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("DRY_RUN", "False")
 
 
 def test_import_zone_only(
-    cli_args: None,  # noqa: ARG001
+    mock_non_dry_run: None,  # noqa: ARG001
     mock_terraform_run: MagicMock,
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
@@ -131,7 +127,7 @@ def test_import_zone_only(
 
 
 def test_import_zone_with_plan(
-    cli_args: None,  # noqa: ARG001
+    mock_non_dry_run: None,  # noqa: ARG001
     mock_terraform_run: MagicMock,
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
@@ -153,7 +149,7 @@ def test_import_zone_with_plan(
 
 
 def test_import_zone_with_dns_records(
-    cli_args: None,  # noqa: ARG001
+    mock_non_dry_run: None,  # noqa: ARG001
     mock_terraform_run: MagicMock,
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
@@ -197,7 +193,7 @@ def test_import_zone_with_dns_records(
 
 
 def test_import_zone_with_rulesets(
-    cli_args: None,  # noqa: ARG001
+    mock_non_dry_run: None,  # noqa: ARG001
     mock_terraform_run: MagicMock,
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
@@ -237,7 +233,7 @@ def test_import_zone_with_rulesets(
 
 
 def test_zone_not_found(
-    cli_args: None,  # noqa: ARG001
+    mock_non_dry_run: None,  # noqa: ARG001
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
 ) -> None:
@@ -250,14 +246,14 @@ def test_zone_not_found(
         main()
 
 
-def test_dns_record_not_found_skipped(
-    cli_args: None,  # noqa: ARG001
+def test_dns_record_not_found_fails(
+    mock_non_dry_run: None,  # noqa: ARG001
     mock_terraform_run: MagicMock,
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
     mock_zone: Zone,
 ) -> None:
-    """Test DNS record not in Cloudflare is skipped."""
+    """Test DNS record not in Cloudflare causes failure."""
     mock_read_input.return_value = build_input_data(
         dns_records=[
             {
@@ -271,19 +267,21 @@ def test_dns_record_not_found_skipped(
     )
     setup_cloudflare_client(mock_cloudflare, mock_zone)
 
-    main()
+    with pytest.raises(SystemExit) as exc_info:
+        main()
 
+    assert exc_info.value.code == 1
     assert mock_terraform_run.call_count == 1
 
 
-def test_ruleset_not_found_skipped(
-    cli_args: None,  # noqa: ARG001
+def test_ruleset_not_found_fails(
+    mock_non_dry_run: None,  # noqa: ARG001
     mock_terraform_run: MagicMock,
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
     mock_zone: Zone,
 ) -> None:
-    """Test ruleset not in Cloudflare is skipped."""
+    """Test ruleset not in Cloudflare causes failure."""
     mock_read_input.return_value = build_input_data(
         rulesets=[
             {
@@ -296,13 +294,15 @@ def test_ruleset_not_found_skipped(
     )
     setup_cloudflare_client(mock_cloudflare, mock_zone)
 
-    main()
+    with pytest.raises(SystemExit) as exc_info:
+        main()
 
+    assert exc_info.value.code == 1
     assert mock_terraform_run.call_count == 1
 
 
 def test_import_failure_exits_with_error(
-    cli_args: None,  # noqa: ARG001
+    mock_non_dry_run: None,  # noqa: ARG001
     mock_terraform_run: MagicMock,
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
@@ -322,13 +322,13 @@ def test_import_failure_exits_with_error(
 
 
 def test_dry_run_flag(
-    cli_args_dry_run: None,  # noqa: ARG001
+    mock_dry_run: None,  # noqa: ARG001
     mock_terraform_run: MagicMock,
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
     mock_zone: Zone,
 ) -> None:
-    """Test --dry-run flag is passed to terraform_run."""
+    """Test dry_run config is passed to terraform_run."""
     mock_read_input.return_value = build_input_data()
     setup_cloudflare_client(mock_cloudflare, mock_zone)
 
