@@ -43,11 +43,11 @@ make generate-variables-tf
 # Lock terraform providers for multiple platforms
 make providers-lock
 
-# Import existing Cloudflare resources into Terraform state
-import-tfstate
-
 # Dry run import (log commands without executing)
-import-tfstate --dry-run
+DRY_RUN=True import-tfstate
+
+# Import existing Cloudflare resources into Terraform state
+DRY_RUN=False import-tfstate
 ```
 
 ## Architecture
