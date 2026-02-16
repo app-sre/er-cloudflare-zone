@@ -1,6 +1,6 @@
 [project]
 name = "er-cloudflare-zone"
-version = "0.1.1"
+version = "0.2.0"
 description = "ERv2 module for managing Cloudflare Zone"
 authors = [
     # Feel free to add or change authors

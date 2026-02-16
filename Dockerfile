@@ -1,6 +1,6 @@
-FROM quay.io/redhat-services-prod/app-sre-tenant/er-base-terraform-main/er-base-terraform-main:0.3.8-13@sha256:a991d0835739fbed914f6433b0ce281939a4b47e65e6bdd4d994a953e50a63f6 AS base
+FROM quay.io/redhat-services-prod/app-sre-tenant/er-base-terraform-main/er-base-terraform-main:0.5.0-1@sha256:a597b028e920344da71679d284aab5a412eb909b9dec9edf4cbd14f9ed2875b3 AS base
 # keep in sync with pyproject.toml
-LABEL konflux.additional-tags="0.1.1"
+LABEL konflux.additional-tags="0.2.0"
 COPY LICENSE /licenses/
 ENV VIRTUAL_ENV="${APP}/.venv" \
     PATH="${APP}/.venv/bin:${PATH}" \
