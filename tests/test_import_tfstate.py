@@ -1,8 +1,11 @@
 """Tests for import_tfstate module."""
 
 import subprocess
-from collections.abc import Iterator
+from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, call, create_autospec, patch
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 import pytest
 from cloudflare.types.dns.record_response import ARecord

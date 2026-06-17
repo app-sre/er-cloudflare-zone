@@ -1,5 +1,8 @@
-from collections.abc import Iterator
+from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, patch
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 import pytest
 
