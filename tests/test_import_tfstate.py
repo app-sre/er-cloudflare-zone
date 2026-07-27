@@ -110,7 +110,7 @@ def mock_non_dry_run(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_import_zone_only(
-    mock_non_dry_run: None,  # noqa: ARG001
+    mock_non_dry_run: None,  # ruff: ignore[unused-function-argument]
     mock_terraform_run: MagicMock,
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
@@ -130,7 +130,7 @@ def test_import_zone_only(
 
 
 def test_import_zone_with_plan(
-    mock_non_dry_run: None,  # noqa: ARG001
+    mock_non_dry_run: None,  # ruff: ignore[unused-function-argument]
     mock_terraform_run: MagicMock,
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
@@ -152,7 +152,7 @@ def test_import_zone_with_plan(
 
 
 def test_import_zone_with_dns_records(
-    mock_non_dry_run: None,  # noqa: ARG001
+    mock_non_dry_run: None,  # ruff: ignore[unused-function-argument]
     mock_terraform_run: MagicMock,
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
@@ -196,7 +196,7 @@ def test_import_zone_with_dns_records(
 
 
 def test_import_zone_with_rulesets(
-    mock_non_dry_run: None,  # noqa: ARG001
+    mock_non_dry_run: None,  # ruff: ignore[unused-function-argument]
     mock_terraform_run: MagicMock,
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
@@ -236,7 +236,7 @@ def test_import_zone_with_rulesets(
 
 
 def test_zone_not_found(
-    mock_non_dry_run: None,  # noqa: ARG001
+    mock_non_dry_run: None,  # ruff: ignore[unused-function-argument]
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
 ) -> None:
@@ -250,7 +250,7 @@ def test_zone_not_found(
 
 
 def test_dns_record_not_found_fails(
-    mock_non_dry_run: None,  # noqa: ARG001
+    mock_non_dry_run: None,  # ruff: ignore[unused-function-argument]
     mock_terraform_run: MagicMock,
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
@@ -278,7 +278,7 @@ def test_dns_record_not_found_fails(
 
 
 def test_ruleset_not_found_fails(
-    mock_non_dry_run: None,  # noqa: ARG001
+    mock_non_dry_run: None,  # ruff: ignore[unused-function-argument]
     mock_terraform_run: MagicMock,
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
@@ -305,7 +305,7 @@ def test_ruleset_not_found_fails(
 
 
 def test_import_failure_exits_with_error(
-    mock_non_dry_run: None,  # noqa: ARG001
+    mock_non_dry_run: None,  # ruff: ignore[unused-function-argument]
     mock_terraform_run: MagicMock,
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
@@ -325,7 +325,7 @@ def test_import_failure_exits_with_error(
 
 
 def test_dry_run_flag(
-    mock_dry_run: None,  # noqa: ARG001
+    mock_dry_run: None,  # ruff: ignore[unused-function-argument]
     mock_terraform_run: MagicMock,
     mock_cloudflare: MagicMock,
     mock_read_input: MagicMock,
