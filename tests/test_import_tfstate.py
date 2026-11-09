@@ -9,7 +9,6 @@ if TYPE_CHECKING:
 
 import pytest
 from cloudflare.types.dns.record_response import ARecord
-from cloudflare.types.rulesets import RulesetListResponse
 from cloudflare.types.zones import Zone
 
 from er_cloudflare_zone.import_tfstate import ZoneNotFoundError, main
@@ -214,10 +213,11 @@ def test_import_zone_with_rulesets(
         ]
     )
 
-    mock_ruleset = create_autospec(RulesetListResponse, instance=True)
-    mock_ruleset.configure_mock(
-        id="ruleset-789", name="redirects", phase="http_request_dynamic_redirect"
-    )
+    mock_ruleset = {
+        "id": "ruleset-789",
+        "name": "redirects",
+        "phase": "http_request_dynamic_redirect",
+    }
     setup_cloudflare_client(mock_cloudflare, mock_zone, rulesets=[mock_ruleset])
 
     main()
