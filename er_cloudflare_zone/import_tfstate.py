@@ -153,13 +153,22 @@ def import_rulesets(
 ) -> list[ImportResult]:
     """Import rulesets."""
     try:
-        ruleset_by_key = {
-            (ruleset.name, str(ruleset.phase)): ruleset.id
-            for ruleset in client.rulesets.list(zone_id=zone_id)
-        }
+        remote_rulesets = client.rulesets.list(zone_id=zone_id)
     except Exception:
         logger.exception("Failed to list rulesets for zone ID %s", zone_id)
         return []
+    if not isinstance(remote_rulesets, list):
+        logger.error(
+            "Unexpected rulesets list response type for zone ID %s: %s",
+            zone_id,
+            type(remote_rulesets),
+        )
+        return []
+    ruleset_by_key = {
+        (str(item["name"]), str(item["phase"])): str(item["id"])
+        for item in remote_rulesets
+        if isinstance(item, dict)
+    }
     results: list[ImportResult] = []
     for ruleset in rulesets:
         ruleset_id = ruleset_by_key.get((ruleset.name, ruleset.phase))
